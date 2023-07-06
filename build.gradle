@@ -1,0 +1,62 @@
+group 'org.example'
+version '1.0-SNAPSHOT'
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-gradle-plugin:3.5.0"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "net.serenity-bdd.serenity-gradle-plugin"
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    slf4jVersion = '1.7.7'
+    serenityCoreVersion = '3.5.0'
+    junitVersion = '4.12'
+    assertJVersion = '3.22.0'
+    logbackVersion = '1.2.10'
+}
+
+dependencies {
+    compile group: 'com.microsoft.rest', name: 'client-runtime', version: '1.7.5'
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.1'
+    testImplementation "net.serenity-bdd:serenity-core:2.0.70"
+    testImplementation "net.serenity-bdd:serenity-junit:2.0.70"
+    implementation "net.serenity-bdd:serenity-screenplay:2.0.70"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:2.0.70"
+    implementation "net.serenity-bdd:serenity-cucumber:1.9.51"
+    implementation "net.serenity-bdd:serenity-screenplay-rest:2.0.70"
+    implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '8.2.2.jre8'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.21'
+    compile fileTree(dir: 'lib', include: '*.jar')
+    compile group: 'org.json', name: 'json', version: '20180813'
+    compile group: 'org.everit.json', name: 'org.everit.json.schema', version: '1.5.1'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+    compile group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.6.0'
+}
+
+gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)
+
